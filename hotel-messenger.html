@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hotel Illinois">
+<link rel="apple-touch-icon" href="https://www.ihotel.illinois.edu/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hotel Illinois Conference Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Ovo&display=swap" rel="stylesheet">
+<style>
+/* LOGO */
+.logo-wrap{display:flex;align-items:center;line-height:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* LOGO */
+.logo-wrap{display:flex;align-items:center;line-height:0}
+.logo-wrap svg{display:block;width:auto}
+.logo-lg svg,.logo-wrap svg.logo-lg{height:44px}
+.logo-md svg,.logo-wrap svg.logo-md{height:36px}
+.logo-sm svg,.logo-wrap svg.logo-sm{height:28px}
+:root{
+  /* Brand palette */
+  --ih-blue:#10294B;      /* Illini Blue */
+  --ih-blue-mid:#1A3A6B;
+  --ih-blue-light:#2A5090;
+  --ih-blue-dark:#0A1B32;
+  --ih-orange:#F15A32;    /* Illini Orange */
+  --ih-orange-light:#F47A5A;
+  --ih-orange-dark:#C43E1A;
+  --ih-cream:#EAEAEA;     /* Cool Gray */
+  --ih-cream-dark:#D0D0D0;
+  --ih-gray:#606061;      /* Charcoal */
+  --ih-gray-light:#E5E9F1;/* Light Blue */
+  --ih-text:#000000;      /* Rich Black */
+  --ih-text-mid:#606061;  /* Charcoal */
+  --ih-text-muted:#8A8A8A;
+  --white:#FFFFFF;
+  --silver:#A8A9AD;       /* Silver Foil */
+  --success:#1A6B45;
+  --radius:8px;--radius-lg:14px;
+}
+body{font-family:'Montserrat',sans-serif;background:#F4F5F7;color:var(--ih-text);min-height:100vh;overflow-x:hidden}
+#view-guest,#view-staff,#view-setup{display:none}
+#view-guest.active{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;position:relative}
+#view-staff.active{display:flex;flex-direction:row;min-height:100vh}
+#view-setup.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:var(--ih-blue)}
+/* SETUP */
+.setup-card{background:var(--white);border-radius:var(--radius-lg);padding:2.75rem;width:440px;max-width:92vw}
+.setup-sub{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ih-gray);margin-bottom:1.25rem}
+.setup-lbl{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ih-blue);margin-bottom:.6rem;margin-top:1.4rem}
+.setup-input{width:100%;padding:.7rem .9rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.9rem;color:var(--ih-text);background:var(--white);margin-bottom:.55rem;outline:none;transition:border-color .2s}
+.setup-input:focus{border-color:var(--ih-blue-light)}
+.btn-blue{width:100%;background:var(--ih-blue);color:var(--white);border:none;padding:.85rem 1.25rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:background .2s;margin-bottom:.55rem}
+.btn-blue:hover{background:var(--ih-blue-light)}
+.btn-orange{width:100%;background:var(--ih-orange);color:var(--white);border:none;padding:.85rem 1.25rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:background .2s}
+.btn-orange:hover{background:var(--ih-orange-dark)}
+.setup-div{display:flex;align-items:center;gap:.75rem;margin:1.2rem 0;color:var(--ih-text-muted);font-size:.75rem}
+.setup-div::before,.setup-div::after{content:'';flex:1;height:1px;background:var(--ih-cream-dark)}
+.setup-hint{margin-top:1.2rem;font-size:.73rem;color:var(--ih-text-muted);line-height:1.65;padding-top:1.2rem;border-top:1px solid var(--ih-cream-dark)}
+/* GUEST — light theme matching staff dashboard */
+#view-guest.active{background:var(--ih-cream)}
+.g-header{position:relative;padding:1.75rem 2rem 1.5rem;display:flex;justify-content:space-between;align-items:center;background:var(--white);border-bottom:2px solid var(--ih-cream-dark)}
+.g-header .logo-wrap img{height:48px !important}
+.g-room-info{text-align:right}
+.g-room-name{font-size:1.05rem;font-weight:700;color:var(--ih-blue);letter-spacing:.01em}
+.g-event-name{font-size:.85rem;color:var(--ih-orange);margin-top:.3rem;font-style:italic;font-weight:500}
+/* How-to banner */
+.g-howto{margin:1.1rem 1.5rem .4rem;background:var(--white);border:1.5px solid var(--ih-gray-light);border-radius:var(--radius-lg);padding:1rem 1.2rem;display:flex;gap:1rem;align-items:flex-start}
+.g-howto-icon{width:34px;height:34px;border-radius:8px;background:var(--ih-gray-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
+.g-howto-body{}
+.g-howto-title{font-size:.78rem;font-weight:600;color:var(--ih-blue-dark);margin-bottom:.3rem}
+.g-howto-steps{display:flex;flex-direction:column;gap:.2rem}
+.g-howto-step{display:flex;align-items:baseline;gap:.45rem;font-size:.75rem;color:var(--ih-text-mid);line-height:1.4}
+.g-howto-num{font-size:.65rem;font-weight:700;color:var(--white);background:var(--ih-orange);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Montserrat',sans-serif}
+/* Welcome strip */
+.g-welcome{padding:1rem 2rem .5rem}
+.g-welcome h1{font-family:'Ovo',serif;font-size:1.7rem;color:var(--ih-blue);font-weight:400;line-height:1.2}
+.g-welcome p{color:var(--ih-text-muted);font-size:.82rem;margin-top:.2rem}
+/* Messages */
+.g-msgs-wrap{position:relative;flex:1;display:flex;flex-direction:column;min-height:80px}
+.g-msgs-watermark{position:absolute;bottom:1rem;right:1.5rem;opacity:.07;pointer-events:none;z-index:0}
+.g-msgs-watermark img{height:36px;width:auto;display:block}
+.g-msgs{flex:1;overflow-y:auto;padding:.75rem 1.5rem;display:flex;flex-direction:column;gap:.55rem;min-height:80px;position:relative;z-index:1}
+.g-msgs::-webkit-scrollbar{width:4px}
+.g-msgs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:2px}
+.g-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45rem;color:var(--ih-text-muted);font-size:.81rem;padding:2rem 1.5rem;text-align:center;min-height:100px}
+.msg-row{display:flex;flex-direction:column;align-items:flex-start}
+.msg-sender{font-size:.67rem;color:var(--ih-text-muted);margin-bottom:.18rem;padding:0 .22rem}
+.msg-bubble{max-width:82%;padding:.68rem .92rem;border-radius:13px;border-bottom-left-radius:3px;font-size:.9rem;line-height:1.5;animation:bIn .2s ease}
+@keyframes bIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg-bubble.g-bub{background:var(--ih-orange);color:var(--white)}
+.msg-bubble.s-bub{background:var(--white);border:1px solid rgba(0,0,0,.08);color:var(--ih-text)}
+.msg-time{font-size:.66rem;margin-top:.18rem;padding:0 .22rem;color:var(--ih-text-muted)}
+/* Input area */
+.g-input-area{padding:.85rem 1.5rem 1.5rem;border-top:1px solid rgba(0,0,0,.07);background:var(--white)}
+.g-input-row{display:flex;gap:.6rem;align-items:flex-end}
+.g-textarea{flex:1;background:var(--ih-cream);border:1.5px solid var(--ih-cream-dark);color:var(--ih-text);padding:.78rem .95rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.95rem;resize:none;outline:none;min-height:46px;max-height:108px;line-height:1.5;transition:border-color .2s}
+.g-textarea::placeholder{color:var(--ih-text-muted)}
+.g-textarea:focus{border-color:var(--ih-blue-light)}
+.send-btn{background:var(--ih-blue);border:none;color:var(--white);width:46px;height:46px;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .18s,transform .1s}
+.send-btn:hover{background:var(--ih-blue-light)}
+.send-btn:active{transform:scale(.94)}
+.status-bar{display:flex;align-items:center;gap:.38rem;font-size:.71rem;color:var(--ih-text-muted);margin-top:.5rem}
+.sdot{width:5px;height:5px;border-radius:50%;background:#34D399;animation:sdot 2.5s infinite}
+@keyframes sdot{0%,100%{opacity:1}50%{opacity:.3}}
+.fs-hint{position:fixed;bottom:1rem;right:1rem;background:rgba(0,0,0,.55);color:rgba(255,255,255,.75);padding:.42rem .82rem;border-radius:8px;font-size:.71rem;cursor:pointer;z-index:999;border:1px solid rgba(255,255,255,.1)}
+/* STAFF SIDEBAR */
+.staff-sidebar{width:268px;flex-shrink:0;background:var(--ih-blue);display:flex;flex-direction:column;min-height:100vh}
+.sb-header{padding:1.2rem 1.35rem 1rem;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-header .wm-i{font-size:1.5rem;color:var(--ih-orange)}
+.sb-header .wm-hotel{font-size:1.5rem;color:var(--white)}
+.sb-sub{font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-top:.15rem}
+.sb-section{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.24);padding:1.05rem 1.35rem .38rem}
+.sb-rooms{flex:1;overflow-y:auto}
+.sb-rooms::-webkit-scrollbar{width:3px}
+.sb-rooms::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1)}
+.sb-room{display:flex;align-items:center;gap:.6rem;padding:.68rem 1.35rem;cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.sb-room:hover{background:rgba(255,255,255,.04)}
+.sb-room.active{background:rgba(255,255,255,.07);border-left-color:var(--ih-orange)}
+.sb-room.has-unread{background:rgba(232,78,15,.07)}
+.sb-icon{width:30px;height:30px;border-radius:6px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:'Ovo',serif;font-size:.9rem;font-weight:700;color:rgba(255,255,255,.48);flex-shrink:0}
+.sb-room.active .sb-icon{background:var(--ih-orange);color:var(--white)}
+.sb-room.has-unread .sb-icon{background:rgba(232,78,15,.22);color:var(--ih-orange-light)}
+.sb-info{flex:1;min-width:0}
+.sb-room-name{font-size:.8rem;font-weight:500;color:rgba(255,255,255,.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-room-prev{font-size:.69rem;color:rgba(255,255,255,.28);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.unread-badge{background:var(--ih-orange);color:var(--white);font-size:.63rem;font-weight:700;padding:.1rem .4rem;border-radius:50px;min-width:15px;text-align:center;flex-shrink:0}
+.sb-footer{padding:.85rem 1.35rem;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:.38rem}
+.sb-btn{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.52);padding:.52rem .35rem;border-radius:7px;font-family:'Montserrat',sans-serif;font-size:.69rem;cursor:pointer;transition:all .15s;text-align:center;font-weight:500}
+.sb-btn:hover{background:rgba(255,255,255,.1);color:var(--white)}
+/* STAFF MAIN */
+.staff-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:100vh}
+.topbar{padding:1.05rem 1.7rem;border-bottom:1px solid rgba(0,0,0,.07);background:var(--white);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-l h2{font-family:'Ovo',serif;font-size:1.4rem;font-weight:400;color:var(--ih-blue)}
+.topbar-l p{font-size:.74rem;color:var(--ih-text-muted);margin-top:.04rem}
+.pills{display:flex;gap:.38rem}
+.pill{font-size:.71rem;font-weight:500;padding:.26rem .68rem;border-radius:50px;display:flex;align-items:center;gap:.28rem}
+.pill-blue{background:var(--ih-gray-light);color:var(--ih-blue)}
+.pill-orange{background:#FCE8E2;color:var(--ih-orange-dark)}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.alert-strip{background:#FCE8E2;border-left:3px solid var(--ih-orange);padding:.6rem 1.7rem;font-size:.81rem;color:var(--ih-orange-dark);display:none;font-weight:500;animation:slideIn .25s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+/* DASHBOARD */
+.dash-wrap{flex:1;overflow-y:auto;padding:1.4rem 1.7rem}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:.85rem}
+.dash-card{background:var(--white);border-radius:var(--radius-lg);padding:1.15rem;border:1.5px solid transparent;cursor:pointer;transition:all .18s}
+.dash-card:hover{border-color:rgba(0,48,135,.14);box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.dash-card.card-has{border-color:rgba(0,48,135,.2)}
+.dash-card.card-unread{border-color:var(--ih-orange);background:#FEF2EE}
+.dc-room{font-family:'Ovo',serif;font-size:1.12rem;font-weight:400;color:var(--ih-blue);line-height:1.2}
+.dc-event{font-size:.71rem;color:var(--ih-text-muted);margin-top:.08rem;margin-bottom:.65rem;font-style:italic;line-height:1.3}
+.dc-msg{font-size:.77rem;color:var(--ih-text-mid);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4}
+.dc-no-msg{font-size:.77rem;color:var(--ih-text-muted);font-style:italic}
+.dc-footer{margin-top:.65rem;display:flex;justify-content:space-between;align-items:center}
+.dc-time{font-size:.67rem;color:var(--ih-text-muted)}
+.dc-badge{background:var(--ih-orange);color:var(--white);font-size:.67rem;font-weight:700;padding:.1rem .42rem;border-radius:50px}
+.dc-dot{width:6px;height:6px;border-radius:50%;background:#34D399}
+/* STAFF CHAT */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.chat-msgs{flex:1;overflow-y:auto;padding:1.2rem 1.7rem;display:flex;flex-direction:column;gap:.55rem}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:3px}
+.chat-empty{text-align:center;color:var(--ih-text-muted);padding:2.5rem;font-size:.84rem}
+.chat-row{display:flex;flex-direction:column;align-items:flex-start}
+.chat-lbl{font-size:.67rem;color:var(--ih-text-muted);margin-bottom:.16rem;padding:0 .18rem}
+.chat-bub{max-width:72%;padding:.68rem .92rem;border-radius:13px;border-bottom-left-radius:3px;font-size:.87rem;line-height:1.5;animation:bIn .2s ease}
+.chat-bub.from-guest{background:var(--white);border:1px solid rgba(0,0,0,.07);color:var(--ih-text)}
+.chat-bub.from-staff{background:var(--ih-blue);color:var(--white)}
+.chat-time{font-size:.66rem;color:var(--ih-text-muted);margin-top:.14rem;padding:0 .18rem}
+.staff-inp-area{padding:.85rem 1.7rem 1.2rem;border-top:1px solid rgba(0,0,0,.06);background:var(--white);flex-shrink:0}
+.qr-row{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.6rem}
+.qr-btn{background:transparent;border:1px solid rgba(0,48,135,.18);color:var(--ih-blue);padding:.28rem .62rem;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:.72rem;cursor:pointer;transition:all .15s;font-weight:500}
+.qr-btn:hover{background:var(--ih-blue);color:var(--white);border-color:var(--ih-blue)}
+.staff-inp-row{display:flex;gap:.58rem;align-items:flex-end}
+.staff-textarea{flex:1;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);padding:.68rem .88rem;font-family:'Montserrat',sans-serif;font-size:.9rem;resize:none;outline:none;min-height:42px;max-height:108px;color:var(--ih-text);background:var(--ih-cream);line-height:1.5;transition:border-color .2s}
+.staff-textarea:focus{border-color:var(--ih-blue-light)}
+.staff-send-btn{background:var(--ih-blue);border:none;color:var(--white);width:42px;height:42px;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .18s}
+.staff-send-btn:hover{background:var(--ih-blue-light)}
+.no-sel{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem;color:var(--ih-text-muted);text-align:center;padding:2rem}
+.no-sel h3{font-family:'Ovo',serif;font-size:1.25rem;color:var(--ih-blue);font-weight:400}
+.no-sel p{font-size:.84rem;max-width:270px;line-height:1.6}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.44);z-index:500;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--white);border-radius:var(--radius-lg);padding:1.7rem;width:420px;max-width:92vw}
+.modal-box h3{font-family:'Ovo',serif;font-size:1.25rem;font-weight:400;color:var(--ih-blue);margin-bottom:1rem}
+.modal-close{float:right;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--ih-text-muted);margin-top:-.1rem}
+.modal-section-lbl{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ih-text-muted);margin-bottom:.35rem;margin-top:.9rem}
+.modal-section-lbl:first-of-type{margin-top:0}
+.btn-danger{width:100%;background:#DC2626;color:var(--white);border:none;padding:.75rem 1.25rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:background .2s;margin-top:.5rem}
+.btn-danger:hover{background:#B91C1C}
+.btn-ghost{width:100%;background:transparent;color:var(--ih-text-muted);border:1.5px solid var(--ih-cream-dark);padding:.75rem 1.25rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:all .2s;margin-top:.4rem}
+.btn-ghost:hover{border-color:var(--ih-text-muted);color:var(--ih-text)}
+/* Topbar actions */
+.topbar-actions{display:flex;gap:.4rem;align-items:center}
+.tb-action-btn{background:transparent;border:1px solid rgba(0,0,0,.1);color:var(--ih-text-muted);padding:.32rem .7rem;border-radius:7px;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.3rem}
+.tb-action-btn:hover{background:var(--ih-cream-dark);color:var(--ih-text)}
+.tb-action-btn.danger:hover{background:#FEE2E2;color:#DC2626;border-color:#FECACA}
+/* Message hover actions */
+.chat-row{position:relative}
+.msg-actions{display:none;gap:.25rem;margin-top:.2rem;padding:0 .18rem}
+.chat-row:hover .msg-actions{display:flex}
+.msg-act-btn{background:transparent;border:1px solid rgba(0,0,0,.1);color:var(--ih-text-muted);padding:.18rem .5rem;border-radius:5px;font-size:.65rem;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .12s}
+.msg-act-btn:hover{background:var(--ih-cream-dark);color:var(--ih-text)}
+.msg-act-btn.del:hover{background:#FEE2E2;color:#DC2626;border-color:#FECACA}
+/* Inline edit */
+.msg-edit-wrap{display:flex;gap:.4rem;align-items:flex-end;margin-top:.3rem;max-width:72%}
+.msg-edit-ta{flex:1;border:1.5px solid var(--ih-blue-light);border-radius:var(--radius);padding:.5rem .7rem;font-family:'Montserrat',sans-serif;font-size:.87rem;resize:none;outline:none;min-height:38px;color:var(--ih-text);background:var(--white);line-height:1.5}
+.msg-edit-save{background:var(--ih-blue);border:none;color:var(--white);padding:.5rem .75rem;border-radius:var(--radius);font-size:.75rem;font-weight:500;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap}
+.msg-edit-cancel{background:transparent;border:1px solid var(--ih-cream-dark);color:var(--ih-text-muted);padding:.5rem .65rem;border-radius:var(--radius);font-size:.75rem;cursor:pointer;font-family:'Montserrat',sans-serif}
+/* KIOSK SETTINGS PANEL */
+.kiosk-settings-trigger{position:absolute;top:0;left:0;width:160px;height:80px;z-index:10;cursor:pointer;-webkit-user-select:none;user-select:none}
+/* Hold indicator ring that grows on long-press */
+.kiosk-hold-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:60px;height:60px;border-radius:50%;border:3px solid var(--ih-orange);opacity:0;transition:none;pointer-events:none;z-index:11}
+.kiosk-hold-ring.holding{transform:translate(-50%,-50%) scale(1);opacity:.5;transition:transform .5s ease,opacity .5s ease}
+.kiosk-settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:none;align-items:center;justify-content:center}
+.kiosk-settings-overlay.open{display:flex}
+.kiosk-panel{background:var(--white);border-radius:var(--radius-lg);padding:2rem;width:340px;max-width:90vw}
+.kiosk-panel-logo{display:flex;align-items:baseline;gap:.1rem;margin-bottom:.2rem}
+.kiosk-panel-sub{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ih-text-muted);margin-bottom:1.5rem}
+.kiosk-pin-row{display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem}
+.kiosk-pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--ih-cream-dark);background:transparent;transition:all .15s}
+.kiosk-pin-dot.filled{background:var(--ih-blue);border-color:var(--ih-blue)}
+.kiosk-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem}
+.kiosk-key{background:var(--ih-cream);border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);padding:.9rem;font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:500;cursor:pointer;transition:all .12s;color:var(--ih-text);text-align:center}
+.kiosk-key:hover{background:var(--ih-cream-dark)}
+.kiosk-key:active{transform:scale(.95)}
+.kiosk-key.del{font-size:.8rem;color:var(--ih-text-muted)}
+.kiosk-error{text-align:center;font-size:.78rem;color:#DC2626;margin-bottom:.75rem;min-height:1.2em}
+.kiosk-settings-actions{display:flex;flex-direction:column;gap:.5rem}
+.kiosk-action-btn{width:100%;padding:.8rem 1rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;text-align:left;display:flex;align-items:center;gap:.65rem;border:1.5px solid var(--ih-cream-dark);background:var(--white);color:var(--ih-text);transition:all .15s}
+.kiosk-action-btn:hover{background:var(--ih-cream);border-color:rgba(0,0,0,.12)}
+.kiosk-action-btn.danger{color:#DC2626;border-color:#FECACA}
+.kiosk-action-btn.danger:hover{background:#FEF2F2}
+.kiosk-action-icon{width:30px;height:30px;border-radius:7px;background:var(--ih-cream);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kiosk-action-btn.danger .kiosk-action-icon{background:#FEE2E2}
+.kiosk-cancel-btn{width:100%;background:transparent;border:none;color:var(--ih-text-muted);font-family:'Montserrat',sans-serif;font-size:.82rem;cursor:pointer;padding:.5rem;margin-top:.25rem}
+
+/* ARCHIVE PAGE */
+.archive-page{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.archive-toolbar{padding:.85rem 1.7rem;border-bottom:1px solid rgba(0,0,0,.07);background:var(--white);display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;flex-shrink:0}
+.archive-search{flex:1;min-width:160px;padding:.55rem .85rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.83rem;outline:none;background:var(--white);color:var(--ih-text)}
+.archive-search:focus{border-color:var(--ih-blue-light)}
+.archive-date-input{padding:.55rem .85rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.83rem;outline:none;background:var(--white);color:var(--ih-text)}
+.archive-date-input:focus{border-color:var(--ih-blue-light)}
+.archive-filter-btn{padding:.55rem .9rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.78rem;cursor:pointer;background:var(--white);color:var(--ih-text-muted);font-weight:500;transition:all .15s;white-space:nowrap}
+.archive-filter-btn:hover{background:var(--ih-cream);color:var(--ih-text)}
+.archive-filter-btn.active{background:var(--ih-blue);color:var(--white);border-color:var(--ih-blue)}
+.archive-export-btn{padding:.55rem .9rem;border:1.5px solid var(--ih-blue);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.78rem;cursor:pointer;background:transparent;color:var(--ih-blue);font-weight:600;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:.3rem}
+.archive-export-btn:hover{background:var(--ih-blue);color:var(--white)}
+.archive-scroll{flex:1;overflow-y:auto;padding:1.2rem 1.7rem;display:flex;flex-direction:column;gap:1rem}
+.archive-scroll::-webkit-scrollbar{width:5px}
+.archive-scroll::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:3px}
+.archive-day-block{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(0,0,0,.06)}
+.archive-day-hdr{padding:.7rem 1rem;background:var(--ih-gray-light);border-bottom:1px solid rgba(0,0,0,.05);display:flex;justify-content:space-between;align-items:center}
+.archive-day-date{font-size:.75rem;font-weight:700;color:var(--ih-blue);letter-spacing:.04em;text-transform:uppercase}
+.archive-day-count{font-size:.68rem;color:var(--ih-text-muted);font-weight:400}
+.archive-msg-row{padding:.6rem 1rem;border-bottom:.5px solid rgba(0,0,0,.04);display:grid;grid-template-columns:100px 1fr auto;gap:.4rem .75rem;align-items:start}
+.archive-msg-row:last-child{border-bottom:none}
+.archive-msg-row:hover{background:rgba(0,0,0,.015)}
+.archive-msg-meta{font-size:.69rem;color:var(--ih-text-muted);line-height:1.4;padding-top:.05rem}
+.archive-msg-meta strong{display:block;color:var(--ih-blue);font-weight:600;font-size:.7rem}
+.archive-msg-body{}
+.archive-msg-room{font-size:.7rem;font-weight:600;color:var(--ih-blue);margin-bottom:.1rem}
+.archive-msg-sender{font-size:.68rem;color:var(--ih-text-muted);margin-bottom:.15rem}
+.archive-msg-text{font-size:.83rem;color:var(--ih-text);line-height:1.45}
+.archive-msg-text.edited::after{content:' (edited)';font-size:.68rem;color:var(--ih-text-muted)}
+.archive-del-btn{background:transparent;border:none;cursor:pointer;color:var(--ih-text-muted);padding:.2rem .35rem;border-radius:4px;font-size:.7rem;transition:all .12s;opacity:0;white-space:nowrap}
+.archive-msg-row:hover .archive-del-btn{opacity:1}
+.archive-del-btn:hover{background:#FEE2E2;color:#DC2626}
+.archive-empty{text-align:center;color:var(--ih-text-muted);padding:3rem;font-size:.88rem}
+.archive-stats{display:flex;gap:.5rem;align-items:center;font-size:.72rem;color:var(--ih-text-muted);padding:.5rem 1.7rem;background:var(--white);border-top:1px solid rgba(0,0,0,.06);flex-shrink:0}
+.archive-stat-pill{background:var(--ih-gray-light);color:var(--ih-blue);padding:.18rem .55rem;border-radius:50px;font-weight:600;font-size:.68rem}
+@media(max-width:768px){#view-staff.active{flex-direction:column}.staff-sidebar{width:100%;min-height:auto}.staff-main{min-height:50vh}}
+
+/* TECH SETUP BAR */
+.tech-bar{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;background:var(--ih-blue);border-top:2px solid var(--ih-orange);flex-shrink:0;gap:1rem}
+.tech-bar-left{}
+.tech-bar-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.tech-bar-sub{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.85);margin-top:.1rem}
+.tech-fs-btn{background:var(--ih-orange);color:var(--white);border:none;padding:.65rem 1.1rem;border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.5rem;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.tech-fs-btn:hover{background:var(--ih-orange-dark)}
+.tech-fs-btn:active{transform:scale(.97)}
+.tech-bar.hidden{display:none}
+/* STANDALONE BANNER */
+.standalone-warn{display:none;background:#FCE8E2;border-bottom:2px solid var(--ih-orange);padding:.65rem 1.5rem;font-size:.78rem;color:var(--ih-orange-dark);text-align:center;font-weight:500;gap:.5rem;align-items:center;justify-content:center;flex-shrink:0}
+.standalone-warn.show{display:flex}
+/* ARCHIVE VIEW */
+.archive-wrap{flex:1;overflow-y:auto;padding:1.4rem 1.7rem;display:none;flex-direction:column;gap:1.2rem}
+.archive-wrap.active{display:flex}
+.archive-controls{display:flex;gap:.6rem;align-items:center;margin-bottom:.25rem;flex-wrap:wrap}
+.archive-search{flex:1;min-width:160px;padding:.6rem .85rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;background:var(--white);color:var(--ih-text)}
+.archive-search:focus{border-color:var(--ih-blue-light)}
+.archive-date-input{padding:.6rem .85rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;background:var(--white);color:var(--ih-text)}
+.archive-date-input:focus{border-color:var(--ih-blue-light)}
+.archive-clear-btn{padding:.6rem .9rem;border:1.5px solid var(--ih-cream-dark);border-radius:var(--radius);font-family:'Montserrat',sans-serif;font-size:.8rem;cursor:pointer;background:var(--white);color:var(--ih-text-muted);transition:all .15s}
+.archive-clear-btn:hover{background:var(--ih-cream-dark);color:var(--ih-text)}
+.archive-day{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(0,0,0,.06)}
+.archive-day-header{padding:.75rem 1.1rem;background:var(--ih-gray-light);font-family:'Montserrat',sans-serif;border-bottom:1px solid rgba(0,0,0,.06);font-size:.75rem;font-weight:700;color:var(--ih-blue-dark);letter-spacing:.04em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.archive-day-count{font-size:.68rem;font-weight:500;color:var(--ih-text-muted);text-transform:none;letter-spacing:0}
+.archive-msg{padding:.65rem 1.1rem;border-bottom:1px solid rgba(0,0,0,.04);display:grid;grid-template-columns:auto 1fr;gap:.4rem .8rem;align-items:baseline}
+.archive-msg:last-child{border-bottom:none}
+.archive-msg-meta{font-size:.68rem;color:var(--ih-text-muted);white-space:nowrap}
+.archive-msg-room{font-size:.72rem;font-weight:600;color:var(--ih-blue);grid-column:2}
+.archive-msg-sender{font-size:.7rem;color:var(--ih-text-muted)}
+.archive-msg-text{font-size:.84rem;color:var(--ih-text);grid-column:2;line-height:1.4}
+.archive-msg.highlight .archive-msg-text{background:#FFF9C4;border-radius:3px;padding:0 .2rem}
+.archive-empty{text-align:center;color:var(--ih-text-muted);padding:3rem;font-size:.88rem}
+.notif-btn{background:transparent;border:1px solid rgba(0,48,135,.18);color:var(--ih-blue);padding:.28rem .62rem;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:.72rem;cursor:pointer;transition:all .15s;font-weight:500;display:flex;align-items:center;gap:.3rem}
+.notif-btn:hover{background:var(--ih-blue);color:var(--white);border-color:var(--ih-blue)}
+.notif-btn.granted{color:var(--success);border-color:var(--success)}
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="view-setup">
+  <div class="setup-card">
+    <div class="logo-wrap"><img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20White.png" alt="Hotel Illinois Conference Center" style="height:40px;width:auto;display:block"></div>
+    <div class="setup-sub" style="margin-top:.75rem">Room Messaging System</div>
+    <div class="setup-lbl">Staff</div>
+    <button class="btn-blue" onclick="openStaff()">Open Staff Dashboard</button>
+    <div class="setup-div">or configure a room tablet</div>
+    <div class="setup-lbl">Sign into existing room</div>
+    <select class="setup-input" id="kiosk-existing" onchange="onExistingRoomChange()">
+      <option value="">— Select a room —</option>
+    </select>
+    <div class="setup-div">or create a new room</div>
+    <div class="setup-lbl">New room</div>
+    <input class="setup-input" type="text" id="kiosk-room" placeholder="Room name (e.g. Alma Mater Room)">
+    <input class="setup-input" type="text" id="kiosk-event" placeholder="Event name (e.g. UIUC Graduation Party)">
+    <button class="btn-orange" onclick="openGuestFromSetup()">Launch Room Kiosk</button>
+    <div class="setup-hint">On iPad: tap Launch, then Safari &rarr; <strong>Add to Home Screen</strong>. To lock the screen, enable <strong>Guided Access</strong> via Settings &rarr; Accessibility &rarr; Guided Access, then triple-click the side button.</div>
+  </div>
+</div>
+
+<!-- GUEST VIEW -->
+<div id="view-guest">
+  <div class="g-header">
+    <div class="logo-wrap"><img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png"  alt="Hotel Illinois Conference Center" style="height:28px;width:auto;display:block"></div>
+    <div class="g-room-info">
+      <div class="g-room-name" id="g-room"></div>
+      <div class="g-event-name" id="g-event"></div>
+    </div>
+  </div>
+
+  <!-- Standalone mode warning -->
+  <div class="standalone-warn" id="standalone-warn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    For the best experience, open this from the Home Screen icon — not Safari.
+    <button onclick="document.getElementById('standalone-warn').classList.remove('show')" style="background:none;border:none;font-size:.9rem;cursor:pointer;color:var(--ih-orange-dark);margin-left:.25rem">✕</button>
+  </div>
+  <!-- How-to card -->
+  <div class="g-howto">
+    <div class="g-howto-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10294B" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    </div>
+    <div class="g-howto-body">
+      <div class="g-howto-title">How to reach our team</div>
+      <div class="g-howto-steps">
+        <div class="g-howto-step"><div class="g-howto-num">1</div><span>Type your request in the box below and tap the send button.</span></div>
+        <div class="g-howto-step"><div class="g-howto-num">2</div><span>Our AV &amp; events team will see it immediately and reply right here.</span></div>
+        <div class="g-howto-step"><div class="g-howto-num">3</div><span>Keep this screen open &mdash; new replies appear automatically.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g-welcome">
+    <h1 id="g-heading">How can we help?</h1>
+    <p id="g-subhead">Send us a message and we&rsquo;ll respond shortly.</p>
+  </div>
+
+  <div class="g-msgs-wrap">
+    <div class="g-msgs-watermark">
+      <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png" alt="">
+    </div>
+    <div class="g-msgs" id="g-msgs"></div>
+  </div>
+
+  <div class="g-input-area">
+    <div class="g-input-row">
+      <textarea class="g-textarea" id="g-input" placeholder="Describe what you need&hellip;" rows="1" onkeydown="guestKD(event)"></textarea>
+      <button class="send-btn" onclick="guestSend()">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="status-bar"><div class="sdot"></div><span>AV &amp; events team is available</span></div>
+  </div>
+  <!-- Tech setup bar — visible until fullscreen is activated -->
+  <div class="tech-bar" id="tech-bar">
+    <div class="tech-bar-left">
+      <div class="tech-bar-label">Tech setup</div>
+      <div class="tech-bar-sub" id="tech-bar-room"></div>
+    </div>
+    <button class="tech-fs-btn" onclick="techGoFullscreen()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      Tap to go full screen &amp; lock for guest
+    </button>
+  </div>
+  <div class="fs-hint" id="fs-hint" style="display:none"></div>
+  <!-- Logo long-press opens staff settings (replaces invisible corner tap) -->
+  <div class="kiosk-settings-trigger" id="kiosk-logo-trigger"></div>
+</div>
+
+<!-- KIOSK SETTINGS OVERLAY -->
+<div class="kiosk-settings-overlay" id="kiosk-overlay">
+  <div class="kiosk-panel" id="kiosk-panel">
+    <!-- PIN entry state -->
+    <div id="kiosk-pin-state">
+      <div class="logo-wrap"><img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20White.png" alt="Hotel Illinois Conference Center" style="height:32px;width:auto;display:block"></div>
+      <div class="kiosk-panel-sub">Staff access required</div>
+      <div class="kiosk-pin-row" id="kiosk-dots">
+        <div class="kiosk-pin-dot" id="pd0"></div>
+        <div class="kiosk-pin-dot" id="pd1"></div>
+        <div class="kiosk-pin-dot" id="pd2"></div>
+        <div class="kiosk-pin-dot" id="pd3"></div>
+      </div>
+      <div class="kiosk-error" id="kiosk-pin-err"></div>
+      <div class="kiosk-numpad">
+        <button class="kiosk-key" onclick="kioskKey('1')">1</button>
+        <button class="kiosk-key" onclick="kioskKey('2')">2</button>
+        <button class="kiosk-key" onclick="kioskKey('3')">3</button>
+        <button class="kiosk-key" onclick="kioskKey('4')">4</button>
+        <button class="kiosk-key" onclick="kioskKey('5')">5</button>
+        <button class="kiosk-key" onclick="kioskKey('6')">6</button>
+        <button class="kiosk-key" onclick="kioskKey('7')">7</button>
+        <button class="kiosk-key" onclick="kioskKey('8')">8</button>
+        <button class="kiosk-key" onclick="kioskKey('9')">9</button>
+        <button class="kiosk-key del" onclick="kioskBackspace()">&#9003;</button>
+        <button class="kiosk-key" onclick="kioskKey('0')">0</button>
+        <button class="kiosk-key del" onclick="closeKioskSettings()">&#10005;</button>
+      </div>
+    </div>
+    <!-- Settings actions state (shown after correct PIN) -->
+    <div id="kiosk-actions-state" style="display:none">
+      <div class="logo-wrap" style="margin-bottom:.6rem"><img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png"  alt="Hotel Illinois Conference Center" style="height:28px;width:auto;display:block"></div>
+      <div class="kiosk-panel-sub">Kiosk settings</div>
+      <div class="kiosk-settings-actions">
+        <button class="kiosk-action-btn" onclick="kioskReload()">
+          <div class="kiosk-action-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ih-blue)" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+          <div><div style="font-weight:600">Reload page</div><div style="font-size:.72rem;color:var(--ih-text-muted);margin-top:.1rem">Refresh and stay on this room</div></div>
+        </button>
+        <button class="kiosk-action-btn" onclick="kioskGoSetup()">
+          <div class="kiosk-action-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ih-blue)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+          <div><div style="font-weight:600">Change room / event</div><div style="font-size:.72rem;color:var(--ih-text-muted);margin-top:.1rem">Return to setup screen</div></div>
+        </button>
+        <button class="kiosk-action-btn danger" onclick="kioskClearRoom()">
+          <div class="kiosk-action-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></div>
+          <div><div style="font-weight:600">Clear all messages</div><div style="font-size:.72rem;color:#DC2626;margin-top:.1rem">Remove chat history for this room</div></div>
+        </button>
+      </div>
+      <button class="kiosk-cancel-btn" onclick="closeKioskSettings()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF VIEW -->
+<div id="view-staff">
+  <div class="staff-sidebar">
+    <div class="sb-header">
+      <div class="logo-wrap" style="margin-bottom:.6rem"><img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png"  alt="Hotel Illinois Conference Center" style="height:28px;width:auto;display:block"></div>
+    </div>
+    <div class="sb-section">Event Rooms</div>
+    <div class="sb-rooms" id="sb-rooms"></div>
+    <div class="sb-footer">
+      <button class="sb-btn" onclick="showDash()">&#8859; Overview</button>
+      <button class="sb-btn" onclick="openAddModal()">+ Room</button>
+      <button class="sb-btn" onclick="markAllRead()">&check; All read</button>
+      <button class="sb-btn" onclick="showArchive()">&#128196; Archive</button>
+    </div>
+  </div>
+  <div class="staff-main">
+    <div class="topbar">
+      <div class="topbar-l">
+        <h2 id="tb-title">All Rooms</h2>
+        <p id="tb-sub">iHotel &amp; Illinois Conference Center</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div class="topbar-actions" id="room-actions" style="display:none">
+          <button class="tb-action-btn" onclick="openEditModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit room
+          </button>
+          <button class="tb-action-btn" onclick="openRoomArchive()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            View history
+          </button>
+          <button class="tb-action-btn danger" onclick="confirmDeleteChat()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Clear chat
+          </button>
+          <button class="tb-action-btn danger" onclick="confirmDeleteRoom()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Delete room
+          </button>
+        </div>
+        <div class="pills">
+          <div class="pill pill-blue"><div class="pill-dot"></div><span id="p-rooms">0 rooms</span></div>
+          <div class="pill pill-orange" id="p-unread-wrap" style="display:none"><div class="pill-dot"></div><span id="p-unread">0 unread</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="alert-strip" id="alert-strip"></div>
+    <div class="archive-page" id="archive-view" style="display:none">
+      <div class="archive-toolbar">
+        <input class="archive-search" type="search" id="archive-search" placeholder="Search messages, rooms, events…" oninput="filterArchive()">
+        <input class="archive-date-input" type="date" id="archive-date" title="Filter by date" onchange="filterArchive()">
+        <button class="archive-filter-btn" id="af-guest" onclick="toggleArchiveFilter('guest')">Guest only</button>
+        <button class="archive-filter-btn" id="af-staff" onclick="toggleArchiveFilter('staff')">Staff only</button>
+        <button class="archive-filter-btn" onclick="clearArchiveFilters()">Clear</button>
+        <button class="archive-export-btn" onclick="exportArchive()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+        <button class="notif-btn" id="notif-btn" onclick="requestNotifPermission()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Enable notifications
+        </button>
+      </div>
+      <div class="archive-scroll" id="archive-list"></div>
+      <div class="archive-stats" id="archive-stats"></div>
+    </div>
+    <div class="dash-wrap" id="dash-view"><div class="dash-grid" id="dash-grid"></div></div>
+    <div class="chat-wrap" id="chat-view" style="display:none">
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <div class="staff-inp-area">
+        <div class="qr-row">
+          <button class="qr-btn" onclick="staffQR('On our way \u2014 give us just a moment.')">On our way</button>
+          <button class="qr-btn" onclick="staffQR('Got it, we\u2019ll take care of that right away.')">On it</button>
+          <button class="qr-btn" onclick="staffQR('We\u2019re sending a technician to your room now.')">Sending tech</button>
+          <button class="qr-btn" onclick="staffQR('Thank you \u2014 we\u2019re looking into it now.')">Looking into it</button>
+          <button class="qr-btn" onclick="staffQR('That should be resolved now. Let us know if you need anything else!')">Resolved \u2713</button>
+        </div>
+        <div class="staff-inp-row">
+          <textarea class="staff-textarea" id="staff-input" placeholder="Reply to guest\u2026" rows="1" onkeydown="staffKD(event)"></textarea>
+          <button class="staff-send-btn" onclick="staffSend()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="no-sel" id="no-sel" style="display:none">
+      <h3>Select a room</h3>
+      <p>Choose a room from the sidebar to view its conversation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAddModal()">&times;</button>
+    <h3>Add a Room</h3>
+    <input class="setup-input" type="text" id="new-room" placeholder="Room name (e.g. Alma Mater Room)">
+    <input class="setup-input" type="text" id="new-event" placeholder="Event name (optional)">
+    <button class="btn-blue" style="width:100%;margin-top:.2rem" onclick="addRoom()">Add Room</button>
+  </div>
+</div>
+
+<!-- ARCHIVE MODAL (single room) -->
+<div class="modal-bg" id="room-archive-modal">
+  <div class="modal-box" style="width:560px;max-height:80vh;display:flex;flex-direction:column">
+    <button class="modal-close" onclick="closeRoomArchive()">&times;</button>
+    <h3 id="room-archive-title">Message Archive</h3>
+    <div style="overflow-y:auto;flex:1;margin-top:.5rem" id="room-archive-list"></div>
+  </div>
+</div>
+
+<!-- EDIT ROOM MODAL -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeEditModal()">&times;</button>
+    <h3>Edit Room</h3>
+    <div class="modal-section-lbl">Room name</div>
+    <input class="setup-input" type="text" id="edit-room-name" placeholder="Room name">
+    <div class="modal-section-lbl">Event name</div>
+    <input class="setup-input" type="text" id="edit-event-name" placeholder="Event name (optional)">
+    <button class="btn-blue" style="width:100%;margin-top:.5rem" onclick="saveEditRoom()">Save Changes</button>
+    <button class="btn-ghost" onclick="closeEditModal()">Cancel</button>
+  </div>
+</div>
+
+<script type="module">
+// ─── FIREBASE ─────────────────────────────────────────────────────────────────
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, get, push, remove, update, onValue, off }
+                           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyDbI9Df4w5j9ty_csir3uYSEonfuw6RzME",
+  authDomain:        "ihotel-messaging.firebaseapp.com",
+  databaseURL:       "https://ihotel-messaging-default-rtdb.firebaseio.com",
+  projectId:         "ihotel-messaging",
+  storageBucket:     "ihotel-messaging.firebasestorage.app",
+  messagingSenderId: "1059243069823",
+  appId:             "1:1059243069823:web:54167267cd515c8a7a8a4a"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
+const STAFF_PIN = '1900';
+
+// ─── AUDIO (notification chime — generated via Web Audio API, no file needed) ─
+let audioCtx = null;
+function playChime() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    // Two-tone pleasant chime
+    [[880, 0, 0.15], [1108, 0.12, 0.15], [1318, 0.22, 0.2]].forEach(([freq, delay, dur]) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+      gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + delay + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + dur + 0.05);
+    });
+  } catch(e) {}
+}
+// Unlock audio context on first user interaction
+document.addEventListener('click',     () => { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }, { once: true });
+document.addEventListener('touchstart',() => { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }, { once: true });
+
+// ─── WEB PUSH NOTIFICATIONS ───────────────────────────────────────────────────
+// NOTE: Web Push requires a Service Worker. We register an inline SW via a blob URL.
+// This works on Chrome/Edge desktop and Safari 16.4+ (home screen PWA only on iOS).
+let swRegistration = null;
+
+async function registerSW() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  try {
+    // Inline service worker — handles push events
+    const swCode = `
+self.addEventListener('push', e => {
+  const d = e.data ? e.data.json() : { title: 'iHotel', body: 'New message' };
+  e.waitUntil(self.registration.showNotification(d.title, {
+    body: d.body, icon: '/favicon.ico', badge: '/favicon.ico',
+    tag: 'ihotel-msg', renotify: true
+  }));
+});
+self.addEventListener('notificationclick', e => { e.notification.close(); clients.openWindow('/'); });`;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    swRegistration = await navigator.serviceWorker.register(swUrl, { scope: '/' });
+  } catch(e) { console.log('SW registration skipped:', e.message); }
+}
+registerSW();
+
+window.requestNotifPermission = async function() {
+  if (!('Notification' in window)) { alert('Notifications not supported in this browser.'); return; }
+  const perm = await Notification.requestPermission();
+  updateNotifBtn(perm);
+  if (perm === 'granted') playChime();
+};
+
+function updateNotifBtn(perm) {
+  const btn = document.getElementById('notif-btn');
+  if (!btn) return;
+  if (perm === 'granted') {
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notifications on';
+    btn.classList.add('granted');
+  } else if (perm === 'denied') {
+    btn.textContent = 'Notifications blocked';
+    btn.disabled = true;
+  }
+}
+
+function showBrowserNotification(title, body) {
+  if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+    try { new Notification(title, { body, icon: '/favicon.ico', tag: 'ihotel-msg', renotify: true }); }
+    catch(e) {}
+  }
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function fmt(ts) {
+  const d = new Date(ts);
+  let h = d.getHours(), m = d.getMinutes();
+  const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+  return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+}
+function fmtDate(ts) {
+  return new Date(ts).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+function fmtDateKey(ts) {
+  const d = new Date(ts);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function slug(s) { return s.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''); }
+function scrollBottom(el) { if (el) el.scrollTop = el.scrollHeight; }
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let curView = null, curRid = null, lastAlertTs = 0;
+let cachedRooms = {}, cachedMsgs = {}, cachedReadTs = {};
+let roomsListener = null, msgsListener = null, readTsListener = null;
+// track last msg count per room for chime triggering
+let prevMsgCounts = {};
+
+// ─── FIREBASE OPS ─────────────────────────────────────────────────────────────
+function listenRooms(cb) {
+  const r = ref(db,'rooms');
+  if (roomsListener) off(r,'value',roomsListener);
+  roomsListener = onValue(r, s => { cachedRooms = s.val()||{}; cb(); });
+}
+function listenMsgs(roomId, cb) {
+  const r = ref(db,'messages/'+roomId);
+  if (msgsListener) off(ref(db,'messages/'+(curRid||roomId)),'value',msgsListener);
+  msgsListener = onValue(r, s => { cachedMsgs[roomId] = s.val()||{}; cb(); });
+}
+function listenAllMsgs(cb) {
+  const r = ref(db,'messages');
+  if (msgsListener) off(ref(db,'messages'),'value',msgsListener);
+  msgsListener = onValue(r, s => { cachedMsgs = s.val()||{}; cb(); });
+}
+function listenReadTs(cb) {
+  const r = ref(db,'readTs');
+  if (readTsListener) off(ref(db,'readTs'),'value',readTsListener);
+  readTsListener = onValue(r, s => { cachedReadTs = s.val()||{}; cb(); });
+}
+function detachListeners() {
+  try { if (roomsListener)  off(ref(db,'rooms'),'value',roomsListener); }   catch(e){}
+  try { if (msgsListener)   off(ref(db,'messages'),'value',msgsListener); } catch(e){}
+  try { if (readTsListener) off(ref(db,'readTs'),'value',readTsListener); } catch(e){}
+  roomsListener = msgsListener = readTsListener = null;
+}
+function writeMsg(rid, sender, text)    { return push(ref(db,'messages/'+rid), {sender,text,ts:Date.now()}); }
+function deleteMessageFB(rid, key)      { return remove(ref(db,'messages/'+rid+'/'+key)); }
+function editMessageFB(rid, key, text)  { return update(ref(db,'messages/'+rid+'/'+key), {text,edited:true}); }
+function setReadTsFB(rid) {
+  const msgs = cachedMsgs[rid]||{};
+  const keys = Object.keys(msgs);
+  if (!keys.length) return;
+  const latest = Math.max(...keys.map(k => msgs[k].ts||0));
+  return set(ref(db,'readTs/'+rid), latest);
+}
+function clearChatFB(rid)  { return set(ref(db,'messages/'+rid), null); }
+function saveRoom(id,n,ev) { return set(ref(db,'rooms/'+id), {name:n, event:ev||''}); }
+function deleteRoomFB(rid) {
+  return Promise.all([remove(ref(db,'rooms/'+rid)), remove(ref(db,'messages/'+rid)), remove(ref(db,'readTs/'+rid))]);
+}
+
+// ─── DERIVED ──────────────────────────────────────────────────────────────────
+function roomsArray() { return Object.entries(cachedRooms).map(([id,r])=>({id,...r})); }
+function roomsSorted() {
+  return roomsArray().slice().sort((a,b)=>{
+    const aT = Object.values(cachedMsgs[a.id]||{}).reduce((mx,m)=>Math.max(mx,m.ts||0),0);
+    const bT = Object.values(cachedMsgs[b.id]||{}).reduce((mx,m)=>Math.max(mx,m.ts||0),0);
+    return bT - aT;
+  });
+}
+function msgsArray(rid) {
+  return Object.entries(cachedMsgs[rid]||{}).map(([key,m])=>({key,...m})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+}
+function unreadCount(rid) {
+  const rt = cachedReadTs[rid]||0;
+  return msgsArray(rid).filter(m=>m.sender==='guest'&&(m.ts||0)>rt).length;
+}
+
+// ─── ROUTING ──────────────────────────────────────────────────────────────────
+function route() {
+  const h = window.location.hash;
+  if (h.startsWith('#guest'))        activateGuest(new URLSearchParams(h.replace(/^#guest\??/,'')).get('room'));
+  else if (h === '#staff')           activateStaff();
+  else                               activateSetup();
+}
+function showV(id) {
+  ['view-setup','view-guest','view-staff'].forEach(v=>document.getElementById(v).classList.toggle('active',v===id));
+}
+
+// ─── SETUP ────────────────────────────────────────────────────────────────────
+function activateSetup() {
+  detachListeners(); showV('view-setup'); curView='setup'; curRid=null;
+  get(ref(db,'rooms')).then(s=>{
+    const rooms = s.val()||{};
+    const sel = document.getElementById('kiosk-existing');
+    sel.innerHTML = '<option value="">— Select a room —</option>';
+    Object.entries(rooms).sort((a,b)=>a[1].name.localeCompare(b[1].name)).forEach(([id,r])=>{
+      const o = document.createElement('option'); o.value=id;
+      o.textContent = r.name+(r.event?' · '+r.event:''); sel.appendChild(o);
+    });
+    document.getElementById('kiosk-room').value=''; document.getElementById('kiosk-event').value='';
+  });
+}
+window.onExistingRoomChange = function() {
+  const rid = document.getElementById('kiosk-existing').value;
+  if (!rid) { document.getElementById('kiosk-room').value=''; document.getElementById('kiosk-event').value=''; return; }
+  get(ref(db,'rooms/'+rid)).then(s=>{ const r=s.val(); if(r){document.getElementById('kiosk-room').value=r.name; document.getElementById('kiosk-event').value=r.event||'';} });
+};
+window.openStaff = function() { window.location.hash='#staff'; };
+window.openGuestFromSetup = function() {
+  const esel=document.getElementById('kiosk-existing').value;
+  const rn=document.getElementById('kiosk-room').value.trim();
+  const en=document.getElementById('kiosk-event').value.trim();
+  if (esel) { if(en) update(ref(db,'rooms/'+esel),{event:en}); window.location.hash='#guest?room='+encodeURIComponent(esel); return; }
+  if (!rn) { alert('Please select an existing room or enter a new room name.'); return; }
+  const id=slug(rn); saveRoom(id,rn,en).then(()=>{ window.location.hash='#guest?room='+encodeURIComponent(id); });
+};
+
+// ─── GUEST VIEW ───────────────────────────────────────────────────────────────
+function activateGuest(rid) {
+  detachListeners();
+  get(ref(db,'rooms/'+rid)).then(s=>{
+    if (!s.exists()) { activateSetup(); return; }
+    const room=s.val();
+    showV('view-guest'); curView='guest'; curRid=rid;
+    document.getElementById('g-room').textContent    = room.name;
+    document.getElementById('g-event').textContent   = room.event||'';
+    document.getElementById('g-heading').textContent = room.event?'Welcome, '+room.event+'!':'How can we help?';
+    const sub=document.getElementById('g-subhead'); if(sub) sub.textContent=room.name+' · Send us a message and we\u2019ll respond shortly.';
+    // Tech bar — reset and populate
+    const techBar = document.getElementById('tech-bar');
+    if (techBar) {
+      techBar.classList.remove('hidden');
+      const techSub = document.getElementById('tech-bar-room');
+      if (techSub) techSub.textContent = room.name + (room.event ? ' · ' + room.event : '');
+    }
+    // Show standalone warning if running in browser (not home screen)
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+    if (!isStandalone) document.getElementById('standalone-warn').classList.add('show');
+    listenMsgs(rid, ()=>renderGMsgs());
+    // Set up logo long-press for staff settings access
+    if (window._initLogoLongPress) window._initLogoLongPress();
+  });
+}
+window.guestKD   = e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();guestSend();} };
+window.guestSend = function() {
+  const el=document.getElementById('g-input'); const t=el.value.trim(); if(!t||!curRid) return;
+  el.value=''; el.style.height=''; writeMsg(curRid,'guest',t);
+};
+function renderGMsgs() {
+  const msgs=msgsArray(curRid); const list=document.getElementById('g-msgs');
+  if (!msgs.length) {
+    list.innerHTML='<div class="g-empty"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--ih-text-muted)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Type a message below and tap send \u2014 our team will reply here.</span></div>'; return;
+  }
+  const wasAtBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 60;
+  const f=document.createDocumentFragment();
+  msgs.forEach(msg=>{
+    const ig=msg.sender==='guest';
+    const row=document.createElement('div'); row.className='msg-row';
+    const snd=document.createElement('div'); snd.className='msg-sender'; snd.textContent=ig?'You':'AV & Events Team';
+    const bub=document.createElement('div'); bub.className='msg-bubble '+(ig?'g-bub':'s-bub'); bub.textContent=msg.text;
+    const tm=document.createElement('div');  tm.className='msg-time'; tm.textContent=fmt(msg.ts);
+    row.appendChild(snd); row.appendChild(bub); row.appendChild(tm); f.appendChild(row);
+  });
+  list.innerHTML=''; list.appendChild(f);
+  // Always scroll to bottom on guest side
+  scrollBottom(list);
+}
+
+// ─── STAFF VIEW ───────────────────────────────────────────────────────────────
+function activateStaff() {
+  detachListeners(); showV('view-staff'); curView='staff'; curRid=null;
+  if (typeof Notification !== 'undefined') updateNotifBtn(Notification.permission);
+  listenRooms(()=>{ renderSB(); if(curRid) renderSChat(); else renderDash(); updatePills(); });
+  listenAllMsgs(()=>{ renderSB(); if(curRid) renderSChat(); else renderDash(); updatePills(); checkAlertAndChime(); });
+  listenReadTs(()=>{ updatePills(); if(curRid) renderSChat(); });
+  showDashUI();
+}
+
+// ─── SIDEBAR ──────────────────────────────────────────────────────────────────
+function renderSB() {
+  const rooms=roomsSorted(); const c=document.getElementById('sb-rooms'); const f=document.createDocumentFragment();
+  rooms.forEach(room=>{
+    const msgs=msgsArray(room.id); const u=unreadCount(room.id); const last=msgs.length?msgs[msgs.length-1]:null;
+    const item=document.createElement('div');
+    item.className='sb-room'+(room.id===curRid?' active':'')+(u>0?' has-unread':'');
+    item.onclick=()=>openRoom(room.id);
+    const ic=document.createElement('div'); ic.className='sb-icon'; ic.textContent=room.name.charAt(0).toUpperCase();
+    const inf=document.createElement('div'); inf.className='sb-info';
+    const nm=document.createElement('div'); nm.className='sb-room-name'; nm.textContent=room.name;
+    const pv=document.createElement('div'); pv.className='sb-room-prev'; pv.textContent=last?last.text:(room.event||'No messages');
+    inf.appendChild(nm); inf.appendChild(pv); item.appendChild(ic); item.appendChild(inf);
+    if(u>0){const b=document.createElement('div'); b.className='unread-badge'; b.textContent=u; item.appendChild(b);}
+    f.appendChild(item);
+  });
+  c.innerHTML=''; c.appendChild(f);
+}
+function updatePills() {
+  const rooms=roomsArray();
+  document.getElementById('p-rooms').textContent=rooms.length+' rooms';
+  const tu=rooms.reduce((a,r)=>a+unreadCount(r.id),0);
+  const pw=document.getElementById('p-unread-wrap');
+  if(tu>0){pw.style.display='flex'; document.getElementById('p-unread').textContent=tu+' unread';} else pw.style.display='none';
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+function showDashUI() {
+  curRid=null;
+  document.getElementById('dash-view').style.display    ='block';
+  document.getElementById('chat-view').style.display    ='none';
+  document.getElementById('no-sel').style.display       ='none';
+  document.getElementById('archive-view').style.display = 'none';
+  document.getElementById('room-actions').style.display = 'none';
+  document.getElementById('tb-title').textContent='All Rooms';
+  document.getElementById('tb-sub').textContent='iHotel & Illinois Conference Center';
+  renderDash(); renderSB(); updatePills();
+}
+window.showDash = showDashUI;
+
+function renderDash() {
+  const rooms=roomsSorted(); const grid=document.getElementById('dash-grid');
+  if(!rooms.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--ih-text-muted);font-size:.9rem"><div style="font-family:\'Ovo\',serif;font-size:1.4rem;color:var(--ih-blue);margin-bottom:.5rem">No rooms yet</div>Use the sidebar to add a room, or launch a kiosk from the setup screen.</div>'; return;
+  }
+  const f=document.createDocumentFragment();
+  rooms.forEach(room=>{
+    const msgs=msgsArray(room.id); const u=unreadCount(room.id); const last=msgs.length?msgs[msgs.length-1]:null;
+    const card=document.createElement('div');
+    card.className='dash-card'+(msgs.length?' card-has':'')+(u>0?' card-unread':'');
+    card.onclick=()=>openRoom(room.id);
+    card.innerHTML='<div class="dc-room">'+esc(room.name)+'</div>'
+      +'<div class="dc-event">'+(room.event?esc(room.event):'<span style="opacity:.45">No event assigned</span>')+'</div>'
+      +(last?'<div class="dc-msg">'+esc(last.text)+'</div>':'<div class="dc-no-msg">No messages yet</div>')
+      +'<div class="dc-footer"><div class="dc-time">'+(last?fmt(last.ts):'')+'</div>'
+      +(u>0?'<div class="dc-badge">'+u+' new</div>':'<div class="dc-dot"></div>')+'</div>';
+    f.appendChild(card);
+  });
+  grid.innerHTML=''; grid.appendChild(f);
+}
+
+// ─── STAFF CHAT ───────────────────────────────────────────────────────────────
+function openRoom(rid) {
+  curRid=rid; setReadTsFB(rid);
+  document.getElementById('dash-view').style.display    ='none';
+  document.getElementById('chat-view').style.display    ='flex';
+  document.getElementById('no-sel').style.display       ='none';
+  document.getElementById('archive-view').style.display = 'none';
+  document.getElementById('room-actions').style.display = 'flex';
+  const room=cachedRooms[rid]||{};
+  document.getElementById('tb-title').textContent=room.name||rid;
+  document.getElementById('tb-sub').textContent=room.event||'No event assigned';
+  renderSChat(); renderSB(); updatePills();
+  document.getElementById('staff-input').focus();
+}
+
+function renderSChat() {
+  const msgs=msgsArray(curRid); const list=document.getElementById('chat-msgs');
+  if(!msgs.length){list.innerHTML='<div class="chat-empty">No messages from this room yet.</div>'; return;}
+  const wasAtBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 80;
+  const f=document.createDocumentFragment();
+  msgs.forEach(msg=>{
+    const ig=msg.sender==='guest';
+    const row=document.createElement('div'); row.className='chat-row';
+    const lbl=document.createElement('div'); lbl.className='chat-lbl'; lbl.textContent=(ig?'Guest':'AV & Events Team')+' \u00b7 '+fmt(msg.ts);
+    const bub=document.createElement('div'); bub.className='chat-bub '+(ig?'from-guest':'from-staff'); bub.textContent=msg.text;
+    const acts=document.createElement('div'); acts.className='msg-actions';
+    const eBtn=document.createElement('button'); eBtn.className='msg-act-btn'; eBtn.textContent='Edit'; eBtn.onclick=()=>startMsgEdit(msg.key,msg.text,row,bub,acts);
+    const dBtn=document.createElement('button'); dBtn.className='msg-act-btn del'; dBtn.textContent='Delete'; dBtn.onclick=()=>deleteMsgFB(msg.key);
+    acts.appendChild(eBtn); acts.appendChild(dBtn);
+    row.appendChild(lbl); row.appendChild(bub); row.appendChild(acts); f.appendChild(row);
+  });
+  list.innerHTML=''; list.appendChild(f);
+  // Always scroll to bottom on staff chat too
+  scrollBottom(list);
+  setReadTsFB(curRid);
+}
+
+window.staffKD   = e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();staffSend();} };
+window.staffSend = function() {
+  if(!curRid) return;
+  const el=document.getElementById('staff-input'); const t=el.value.trim(); if(!t) return;
+  el.value=''; el.style.height=''; writeMsg(curRid,'staff',t);
+};
+window.staffQR = t => { document.getElementById('staff-input').value=t; staffSend(); };
+
+// ─── MESSAGE EDIT / DELETE ────────────────────────────────────────────────────
+function startMsgEdit(key, cur, row, bub, acts) {
+  bub.style.display='none'; acts.style.display='none';
+  const wrap=document.createElement('div'); wrap.className='msg-edit-wrap';
+  const ta=document.createElement('textarea'); ta.className='msg-edit-ta'; ta.value=cur; ta.rows=2;
+  const sv=document.createElement('button'); sv.className='msg-edit-save'; sv.textContent='Save';
+  const cn=document.createElement('button'); cn.className='msg-edit-cancel'; cn.textContent='Cancel';
+  sv.onclick=()=>{ const t=ta.value.trim(); if(!t){alert('Cannot be empty.');return;} editMessageFB(curRid,key,t); wrap.remove(); bub.style.display=''; acts.style.display=''; };
+  cn.onclick=()=>{ wrap.remove(); bub.style.display=''; acts.style.display=''; };
+  wrap.appendChild(ta); wrap.appendChild(sv); wrap.appendChild(cn); row.appendChild(wrap);
+  ta.focus(); ta.select();
+}
+function deleteMsgFB(key) { if(!confirm('Delete this message?')) return; deleteMessageFB(curRid,key); }
+
+// ─── ROOM MANAGEMENT ─────────────────────────────────────────────────────────
+window.openAddModal   = ()=>document.getElementById('add-modal').classList.add('open');
+window.closeAddModal  = ()=>document.getElementById('add-modal').classList.remove('open');
+window.openEditModal  = ()=>{
+  if(!curRid) return;
+  const r=cachedRooms[curRid]||{};
+  document.getElementById('edit-room-name').value=r.name||'';
+  document.getElementById('edit-event-name').value=r.event||'';
+  document.getElementById('edit-modal').classList.add('open');
+};
+window.closeEditModal = ()=>document.getElementById('edit-modal').classList.remove('open');
+window.addRoom = ()=>{
+  const n=document.getElementById('new-room').value.trim(); const ev=document.getElementById('new-event').value.trim();
+  if(!n){alert('Please enter a room name.');return;}
+  const id=slug(n);
+  get(ref(db,'rooms/'+id)).then(s=>{ if(s.exists()){alert(n+' already exists.');return;} saveRoom(id,n,ev).then(()=>{ closeAddModal(); document.getElementById('new-room').value=''; document.getElementById('new-event').value=''; }); });
+};
+window.saveEditRoom = ()=>{
+  const n=document.getElementById('edit-room-name').value.trim(); const ev=document.getElementById('edit-event-name').value.trim();
+  if(!n){alert('Room name cannot be empty.');return;}
+  update(ref(db,'rooms/'+curRid),{name:n,event:ev}).then(()=>{ closeEditModal(); document.getElementById('tb-title').textContent=n; document.getElementById('tb-sub').textContent=ev||'No event assigned'; });
+};
+window.confirmDeleteRoom = ()=>{
+  const r=cachedRooms[curRid]||{};
+  if(!confirm('Delete "'+(r.name||curRid)+'" and all messages? This cannot be undone.')) return;
+  deleteRoomFB(curRid).then(()=>showDashUI());
+};
+window.confirmDeleteChat = ()=>{
+  const r=cachedRooms[curRid]||{};
+  if(!confirm('Clear all messages in "'+(r.name||curRid)+'"? This cannot be undone.')) return;
+  clearChatFB(curRid);
+};
+window.markAllRead = ()=>roomsArray().forEach(r=>setReadTsFB(r.id));
+
+// ─── ALERTS + CHIME ───────────────────────────────────────────────────────────
+function checkAlertAndChime() {
+  let newestTs=0, newestRoom=null;
+  roomsArray().forEach(room=>{
+    const rt=cachedReadTs[room.id]||0;
+    msgsArray(room.id).filter(m=>m.sender==='guest'&&m.ts>rt&&m.ts>lastAlertTs).forEach(m=>{
+      if(m.ts>newestTs){newestTs=m.ts; newestRoom=room;}
+    });
+  });
+  if(newestRoom && newestTs>lastAlertTs){
+    lastAlertTs=newestTs;
+    playChime();
+    showBrowserNotification('iHotel — New message', newestRoom.name + ': ' + (msgsArray(newestRoom.id).slice(-1)[0]?.text||''));
+    const s=document.getElementById('alert-strip');
+    s.textContent='\uD83D\uDD14 New message from '+newestRoom.name;
+    s.style.display='block';
+    clearTimeout(s._t); s._t=setTimeout(()=>s.style.display='none',6000);
+  }
+  // Also check for new msgs on currently open room (for scroll)
+  if(curRid){
+    const cur=msgsArray(curRid).length;
+    if(prevMsgCounts[curRid]!==undefined && cur>prevMsgCounts[curRid]) scrollBottom(document.getElementById('chat-msgs'));
+    prevMsgCounts[curRid]=cur;
+  }
+}
+
+// ─── ARCHIVE ──────────────────────────────────────────────────────────────────
+// All messages are kept in Firebase permanently — archive = all messages
+// Auto-archive: every message written is automatically in the archive
+let allArchiveMsgs = [];
+let archiveFilterSender = null; // null | 'guest' | 'staff'
+
+window.showArchive = function() {
+  curRid = null;
+  document.getElementById('dash-view').style.display    = 'none';
+  document.getElementById('chat-view').style.display    = 'none';
+  document.getElementById('no-sel').style.display       = 'none';
+  document.getElementById('archive-view').style.display = 'flex';
+  document.getElementById('room-actions').style.display = 'none';
+  document.getElementById('tb-title').textContent = 'Message Archive';
+  document.getElementById('tb-sub').textContent   = 'All rooms · All time · Auto-archived';
+  buildArchive();
+  renderSB();
+};
+
+function buildArchive() {
+  allArchiveMsgs = [];
+  roomsArray().forEach(room => {
+    msgsArray(room.id).forEach(msg => {
+      allArchiveMsgs.push({ ...msg, roomId: room.id, roomName: room.name, roomEvent: room.event || '' });
+    });
+  });
+  allArchiveMsgs.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+  applyArchiveFilters();
+}
+
+function applyArchiveFilters() {
+  const q       = (document.getElementById('archive-search').value || '').toLowerCase().trim();
+  const dateVal = document.getElementById('archive-date').value;
+  let filtered  = allArchiveMsgs;
+  if (q)        filtered = filtered.filter(m => m.text.toLowerCase().includes(q) || m.roomName.toLowerCase().includes(q) || m.roomEvent.toLowerCase().includes(q));
+  if (dateVal)  filtered = filtered.filter(m => fmtDateKey(m.ts) === dateVal);
+  if (archiveFilterSender) filtered = filtered.filter(m => m.sender === archiveFilterSender);
+  renderArchive(filtered);
+}
+
+window.filterArchive        = applyArchiveFilters;
+window.toggleArchiveFilter  = function(sender) {
+  archiveFilterSender = archiveFilterSender === sender ? null : sender;
+  document.getElementById('af-guest').classList.toggle('active', archiveFilterSender === 'guest');
+  document.getElementById('af-staff').classList.toggle('active', archiveFilterSender === 'staff');
+  applyArchiveFilters();
+};
+window.clearArchiveFilters  = function() {
+  archiveFilterSender = null;
+  document.getElementById('archive-search').value = '';
+  document.getElementById('archive-date').value   = '';
+  document.getElementById('af-guest').classList.remove('active');
+  document.getElementById('af-staff').classList.remove('active');
+  applyArchiveFilters();
+};
+
+function renderArchive(msgs) {
+  const container = document.getElementById('archive-list');
+  const statsEl   = document.getElementById('archive-stats');
+
+  // Stats bar
+  const gCount = msgs.filter(m => m.sender === 'guest').length;
+  const sCount = msgs.filter(m => m.sender === 'staff').length;
+  const rooms  = [...new Set(msgs.map(m => m.roomId))].length;
+  statsEl.innerHTML = `<span class="archive-stat-pill">${msgs.length} messages</span>`
+    + `<span class="archive-stat-pill">${rooms} room${rooms !== 1 ? 's' : ''}</span>`
+    + `<span class="archive-stat-pill">${gCount} guest</span>`
+    + `<span class="archive-stat-pill">${sCount} staff</span>`;
+
+  if (!msgs.length) {
+    container.innerHTML = '<div class="archive-empty">No messages match your filters.</div>';
+    return;
+  }
+
+  // Group by date
+  const byDay = {};
+  msgs.forEach(msg => {
+    const dk = fmtDateKey(msg.ts);
+    if (!byDay[dk]) byDay[dk] = [];
+    byDay[dk].push(msg);
+  });
+
+  const f = document.createDocumentFragment();
+  Object.keys(byDay).sort().reverse().forEach(dk => {
+    const dayMsgs = byDay[dk];
+    const block   = document.createElement('div');
+    block.className = 'archive-day-block';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'archive-day-hdr';
+    hdr.innerHTML = `<span class="archive-day-date">${fmtDate(dayMsgs[0].ts)}</span><span class="archive-day-count">${dayMsgs.length} message${dayMsgs.length !== 1 ? 's' : ''}</span>`;
+    block.appendChild(hdr);
+
+    dayMsgs.forEach(msg => {
+      const row = document.createElement('div');
+      row.className = 'archive-msg-row';
+
+      const meta = document.createElement('div');
+      meta.className = 'archive-msg-meta';
+      meta.innerHTML = `<strong>${esc(msg.roomName)}</strong>${fmt(msg.ts)}`;
+
+      const body = document.createElement('div');
+      body.className = 'archive-msg-body';
+      body.innerHTML = `<div class="archive-msg-sender">${esc(msg.sender === 'guest' ? 'Guest' : 'AV & Events Team')}</div>`
+        + `<div class="archive-msg-text${msg.edited ? ' edited' : ''}">${esc(msg.text)}</div>`;
+
+      const del = document.createElement('button');
+      del.className = 'archive-del-btn';
+      del.title     = 'Delete this message';
+      del.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
+      del.onclick = () => deleteArchiveMsg(msg.roomId, msg.key, row);
+
+      row.appendChild(meta);
+      row.appendChild(body);
+      row.appendChild(del);
+      block.appendChild(row);
+    });
+    f.appendChild(block);
+  });
+  container.innerHTML = '';
+  container.appendChild(f);
+}
+
+function deleteArchiveMsg(roomId, msgKey, rowEl) {
+  if (!confirm('Delete this message from the archive? This cannot be undone.')) return;
+  deleteMessageFB(roomId, msgKey).then(() => {
+    rowEl.style.opacity = '0';
+    rowEl.style.transition = 'opacity .25s';
+    setTimeout(() => { rowEl.remove(); buildArchive(); }, 260);
+  });
+}
+
+window.exportArchive = function() {
+  const q       = (document.getElementById('archive-search').value || '').toLowerCase().trim();
+  const dateVal = document.getElementById('archive-date').value;
+  let filtered  = allArchiveMsgs;
+  if (q)        filtered = filtered.filter(m => m.text.toLowerCase().includes(q) || m.roomName.toLowerCase().includes(q) || m.roomEvent.toLowerCase().includes(q));
+  if (dateVal)  filtered = filtered.filter(m => fmtDateKey(m.ts) === dateVal);
+  if (archiveFilterSender) filtered = filtered.filter(m => m.sender === archiveFilterSender);
+
+  if (!filtered.length) { alert('No messages to export.'); return; }
+
+  const header = ['Date', 'Time', 'Room', 'Event', 'Sender', 'Message'];
+  const rows   = filtered.map(m => {
+    const d = new Date(m.ts);
+    return [
+      fmtDateKey(m.ts),
+      fmt(m.ts),
+      m.roomName,
+      m.roomEvent,
+      m.sender === 'guest' ? 'Guest' : 'AV & Events Team',
+      '"' + m.text.replace(/"/g, '""') + '"'
+    ];
+  });
+  const csv  = [header, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'ihotel-messages-' + (dateVal || fmtDateKey(Date.now())) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+// Single-room archive from the room view (modal)
+window.openRoomArchive = function() {
+  if (!curRid) return;
+  const room  = cachedRooms[curRid] || {};
+  document.getElementById('room-archive-title').textContent = room.name + ' — Message History';
+  const msgs  = msgsArray(curRid);
+  const list  = document.getElementById('room-archive-list');
+  if (!msgs.length) {
+    list.innerHTML = '<div class="archive-empty">No messages in this room yet.</div>';
+  } else {
+    const f = document.createDocumentFragment();
+    msgs.forEach(msg => {
+      const row = document.createElement('div');
+      row.className = 'archive-msg-row';
+      row.style.gridTemplateColumns = '90px 1fr auto';
+      const meta = document.createElement('div');
+      meta.className = 'archive-msg-meta';
+      meta.textContent = fmt(msg.ts);
+      const body = document.createElement('div');
+      body.className = 'archive-msg-body';
+      body.innerHTML = `<div class="archive-msg-sender">${esc(msg.sender === 'guest' ? 'Guest' : 'AV & Events Team')}</div>`
+        + `<div class="archive-msg-text${msg.edited ? ' edited' : ''}">${esc(msg.text)}</div>`;
+      const del = document.createElement('button');
+      del.className = 'archive-del-btn';
+      del.title     = 'Delete';
+      del.innerHTML = '✕';
+      del.style.opacity = '1';
+      del.onclick = () => {
+        if (!confirm('Delete this message?')) return;
+        deleteMessageFB(curRid, msg.key).then(() => { row.remove(); });
+      };
+      row.appendChild(meta); row.appendChild(body); row.appendChild(del);
+      f.appendChild(row);
+    });
+    list.innerHTML = ''; list.appendChild(f);
+  }
+  document.getElementById('room-archive-modal').classList.add('open');
+};
+window.closeRoomArchive = () => document.getElementById('room-archive-modal').classList.remove('open');
+
+// ─── KIOSK SETTINGS ───────────────────────────────────────────────────────────
+let kioskPinEntry='';
+window.openKioskSettings = function(){
+  kioskPinEntry=''; updatePinDots('pd','');
+  document.getElementById('kiosk-pin-err').textContent='';
+  document.getElementById('kiosk-pin-state').style.display='block';
+  document.getElementById('kiosk-actions-state').style.display='none';
+  document.getElementById('kiosk-overlay').classList.add('open');
+  try{if(document.exitFullscreen)document.exitFullscreen(); else if(document.webkitExitFullscreen)document.webkitExitFullscreen();}catch(e){}
+};
+window.closeKioskSettings = function(){
+  document.getElementById('kiosk-overlay').classList.remove('open');
+  setTimeout(goFS,300);
+};
+function updatePinDots(prefix,entry){
+  for(let i=0;i<4;i++) document.getElementById(prefix+i).classList.toggle('filled',i<entry.length);
+}
+window.kioskKey = function(d){
+  if(kioskPinEntry.length>=4) return;
+  kioskPinEntry+=d; updatePinDots('pd',kioskPinEntry);
+  if(kioskPinEntry.length===4){
+    if(kioskPinEntry===STAFF_PIN){ setTimeout(showKioskActions,150); }
+    else{
+      document.getElementById('kiosk-pin-err').textContent='Incorrect PIN. Try again.';
+      setTimeout(()=>{ kioskPinEntry=''; updatePinDots('pd',''); document.getElementById('kiosk-pin-err').textContent=''; },900);
+    }
+  }
+};
+window.kioskBackspace = ()=>{ kioskPinEntry=kioskPinEntry.slice(0,-1); updatePinDots('pd',kioskPinEntry); };
+function showKioskActions(){ document.getElementById('kiosk-pin-state').style.display='none'; document.getElementById('kiosk-actions-state').style.display='block'; }
+window.showKioskActions=showKioskActions;
+window.kioskReload  = ()=>{ document.getElementById('kiosk-overlay').classList.remove('open'); setTimeout(()=>location.reload(),350); };
+window.kioskGoSetup = ()=>{ document.getElementById('kiosk-overlay').classList.remove('open'); detachListeners(); window.location.hash=''; showV('view-setup'); curView='setup'; activateSetup(); };
+window.kioskClearRoom = ()=>{ if(!curRid) return; clearChatFB(curRid).then(()=>closeKioskSettings()); };
+
+// ─── FULLSCREEN ───────────────────────────────────────────────────────────────
+function goFS(){
+  const el=document.documentElement;
+  try{(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}catch(e){}
+}
+window.goFS=goFS;
+
+// Re-enter fullscreen any time it's lost on the guest screen
+// (handles pull-down gesture dismissal)
+function attachFSReentry(){
+  const handler = () => {
+    const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    const panelOpen = document.getElementById('kiosk-overlay').classList.contains('open');
+    if (!isFS && curView==='guest' && !panelOpen) {
+      // Small delay so the OS animation finishes before we push back
+      setTimeout(goFS, 300);
+    }
+  };
+  document.addEventListener('fullscreenchange',        handler);
+  document.addEventListener('webkitfullscreenchange',  handler);
+}
+attachFSReentry();
+
+window.techGoFullscreen = function() {
+  goFS();
+  document.getElementById('tech-bar').classList.add('hidden');
+  const warn = document.getElementById('standalone-warn');
+  if (warn) warn.classList.remove('show');
+};
+
+// ─── LOGO LONG-PRESS TO OPEN SETTINGS ────────────────────────────────────────
+function initLogoLongPress(){
+  const trigger = document.getElementById('kiosk-logo-trigger');
+  if (!trigger) return;
+
+  // Add the visual ring inside the trigger
+  const ring = document.createElement('div');
+  ring.className = 'kiosk-hold-ring';
+  ring.id = 'kiosk-hold-ring';
+  trigger.appendChild(ring);
+
+  let holdTimer = null;
+
+  function startHold(e){
+    e.preventDefault();
+    ring.classList.add('holding');
+    holdTimer = setTimeout(() => {
+      ring.classList.remove('holding');
+      openKioskSettings();
+    }, 600);
+  }
+  function cancelHold(){
+    clearTimeout(holdTimer);
+    holdTimer = null;
+    ring.classList.remove('holding');
+  }
+
+  trigger.addEventListener('touchstart',  startHold,  { passive: false });
+  trigger.addEventListener('touchend',    cancelHold);
+  trigger.addEventListener('touchcancel', cancelHold);
+  trigger.addEventListener('touchmove',   cancelHold);
+  // Mouse fallback for non-touch (desktop testing)
+  trigger.addEventListener('mousedown',   startHold);
+  trigger.addEventListener('mouseup',     cancelHold);
+  trigger.addEventListener('mouseleave',  cancelHold);
+}
+// Called after guest view is shown
+window._initLogoLongPress = initLogoLongPress;
+
+// ─── MISC ─────────────────────────────────────────────────────────────────────
+document.addEventListener('input',e=>{
+  if(e.target.tagName==='TEXTAREA'){e.target.style.height='auto'; e.target.style.height=Math.min(e.target.scrollHeight,108)+'px';}
+});
+document.getElementById('add-modal').addEventListener('click',function(e){if(e.target===this)closeAddModal();});
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeEditModal();});
+document.getElementById('room-archive-modal').addEventListener('click',function(e){if(e.target===this)closeRoomArchive();});
+
+window.addEventListener('hashchange',route);
+route();
+</script>
+
+</body>
+</html>
