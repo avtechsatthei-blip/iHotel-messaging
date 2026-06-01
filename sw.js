@@ -8,6 +8,8 @@ const SHELL = [
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
+  '/icon-orange-192.png',
+  '/icon-orange-512.png',
   'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Ovo&display=swap',
   'https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20White.png',
   'https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png',
