@@ -1,0 +1,85 @@
+/* ─── KIOSK SETTINGS PANEL ───────────────────────────────────────────────── */
+
+/* Invisible long-press trigger zone overlaying the logo in the guest header */
+.kiosk-settings-trigger {
+  position: absolute; top: 0; left: 0;
+  width: 160px; height: 80px;
+  z-index: 10; cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+}
+
+/* Hold feedback ring */
+.kiosk-hold-ring {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 60px; height: 60px; border-radius: 50%;
+  border: 3px solid var(--ih-orange);
+  opacity: 0; transition: none; pointer-events: none; z-index: 11;
+}
+.kiosk-hold-ring.holding {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: .5;
+  transition: transform .5s ease, opacity .5s ease;
+}
+
+/* Fullscreen overlay */
+.kiosk-settings-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 1000; display: none;
+  align-items: center; justify-content: center;
+}
+.kiosk-settings-overlay.open { display: flex; }
+
+.kiosk-panel {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 2rem; width: 340px; max-width: 90vw;
+}
+.kiosk-panel-sub {
+  font-size: .65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ih-text-muted); margin-bottom: 1.5rem;
+}
+
+/* PIN dots */
+.kiosk-pin-row  { display: flex; gap: .5rem; justify-content: center; margin-bottom: 1rem; }
+.kiosk-pin-dot  { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ih-cream-dark); background: transparent; transition: all .15s; }
+.kiosk-pin-dot.filled { background: var(--ih-blue); border-color: var(--ih-blue); }
+
+/* Number pad */
+.kiosk-numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-bottom: 1rem; }
+.kiosk-key {
+  background: var(--ih-cream); border: 1.5px solid var(--ih-cream-dark);
+  border-radius: var(--radius); padding: .9rem;
+  font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500;
+  cursor: pointer; transition: all .12s; color: var(--ih-text); text-align: center;
+}
+.kiosk-key:hover  { background: var(--ih-cream-dark); }
+.kiosk-key:active { transform: scale(.95); }
+.kiosk-key.del    { font-size: .8rem; color: var(--ih-text-muted); }
+
+.kiosk-error { text-align: center; font-size: .78rem; color: #DC2626; margin-bottom: .75rem; min-height: 1.2em; }
+
+/* Settings action list */
+.kiosk-settings-actions { display: flex; flex-direction: column; gap: .5rem; }
+.kiosk-action-btn {
+  width: 100%; padding: .8rem 1rem; border-radius: var(--radius);
+  font-family: 'Montserrat', sans-serif; font-size: .88rem; font-weight: 500;
+  cursor: pointer; text-align: left; display: flex; align-items: center; gap: .65rem;
+  border: 1.5px solid var(--ih-cream-dark); background: var(--white); color: var(--ih-text);
+  transition: all .15s;
+}
+.kiosk-action-btn:hover { background: var(--ih-cream); border-color: rgba(0,0,0,.12); }
+.kiosk-action-btn.danger           { color: #DC2626; border-color: #FECACA; }
+.kiosk-action-btn.danger:hover     { background: #FEF2F2; }
+
+.kiosk-action-icon {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: var(--ih-cream); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.kiosk-action-btn.danger .kiosk-action-icon { background: #FEE2E2; }
+
+.kiosk-cancel-btn {
+  width: 100%; background: transparent; border: none;
+  color: var(--ih-text-muted); font-family: 'Montserrat', sans-serif;
+  font-size: .82rem; cursor: pointer; padding: .5rem; margin-top: .25rem;
+}

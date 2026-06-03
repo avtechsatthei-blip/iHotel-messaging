@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="iHotel">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10294B">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hotel Illinois Conference Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Ovo&display=swap" rel="stylesheet">
+
+<!-- Styles — each file covers one area of the UI -->
+<link rel="stylesheet" href="css/variables.css">  <!-- :root palette, reset, body, view visibility -->
+<link rel="stylesheet" href="css/setup.css">       <!-- Setup / landing screen -->
+<link rel="stylesheet" href="css/guest.css">       <!-- Guest kiosk view -->
+<link rel="stylesheet" href="css/staff.css">       <!-- Staff sidebar, topbar, dashboard, chat -->
+<link rel="stylesheet" href="css/modals.css">      <!-- All modal dialogs -->
+<link rel="stylesheet" href="css/archive.css">     <!-- Archive page -->
+<link rel="stylesheet" href="css/kiosk.css">       <!-- Kiosk settings panel + tech bar -->
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SETUP SCREEN
+     Landing page — staff open dashboard or configure a kiosk tablet
+════════════════════════════════════════════════════════════════ -->
+<div id="view-setup">
+  <div class="setup-card">
+    <div class="logo-wrap">
+      <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20White.png"
+           alt="Hotel Illinois Conference Center" style="height:40px;width:auto;display:block">
+    </div>
+    <div class="setup-sub" style="margin-top:.75rem">Room Messaging System</div>
+
+    <div class="setup-lbl">Staff</div>
+    <button class="btn-blue" onclick="openStaff()">Open Staff Dashboard</button>
+
+    <div class="setup-div">or configure a room tablet</div>
+
+    <div class="setup-lbl">Sign into existing room</div>
+    <select class="setup-input" id="kiosk-existing" onchange="onExistingRoomChange()">
+      <option value="">— Select a room —</option>
+    </select>
+
+    <div class="setup-div">or create a new room</div>
+
+    <div class="setup-lbl">New room</div>
+    <input class="setup-input" type="text" id="kiosk-room"  placeholder="Room name (e.g. Alma Mater Room)">
+    <input class="setup-input" type="text" id="kiosk-event" placeholder="Event name (e.g. UIUC Graduation Party)">
+    <button class="btn-orange" onclick="openGuestFromSetup()">Launch Room Kiosk</button>
+
+    <div class="setup-hint">
+      On iPad: tap Launch, then Safari &rarr; <strong>Add to Home Screen</strong>.
+      To lock the screen, enable <strong>Guided Access</strong> via
+      Settings &rarr; Accessibility &rarr; Guided Access, then triple-click the side button.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GUEST KIOSK VIEW
+     Shown on the iPad in the conference room
+════════════════════════════════════════════════════════════════ -->
+<div id="view-guest">
+
+  <!-- Header: logo (long-press for staff settings) + room/event name -->
+  <div class="g-header">
+    <div class="logo-wrap">
+      <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png"
+           alt="Hotel Illinois Conference Center" style="height:28px;width:auto;display:block">
+    </div>
+    <div class="g-room-info">
+      <div class="g-room-name" id="g-room"></div>
+      <div class="g-event-name" id="g-event"></div>
+    </div>
+    <!-- Invisible long-press zone overlaying the logo — opens staff settings -->
+    <div class="kiosk-settings-trigger" id="kiosk-logo-trigger"></div>
+  </div>
+
+  <!-- Safari warning (hidden when installed as home screen PWA) -->
+  <div class="standalone-warn" id="standalone-warn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
+    </svg>
+    For the best experience, open this from the Home Screen icon — not Safari.
+    <button onclick="document.getElementById('standalone-warn').classList.remove('show')"
+            style="background:none;border:none;font-size:.9rem;cursor:pointer;color:var(--ih-orange-dark);margin-left:.25rem">✕</button>
+  </div>
+
+  <!-- How-to instructions card -->
+  <div class="g-howto">
+    <div class="g-howto-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10294B" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+      </svg>
+    </div>
+    <div class="g-howto-body">
+      <div class="g-howto-title">How to reach our team</div>
+      <div class="g-howto-steps">
+        <div class="g-howto-step"><div class="g-howto-num">1</div><span>Type your request in the box below and tap the send button.</span></div>
+        <div class="g-howto-step"><div class="g-howto-num">2</div><span>Our AV &amp; events team will see it immediately and reply right here.</span></div>
+        <div class="g-howto-step"><div class="g-howto-num">3</div><span>Keep this screen open &mdash; new replies appear automatically.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome heading (populated by JS with event name) -->
+  <div class="g-welcome">
+    <h1 id="g-heading">How can we help?</h1>
+    <p id="g-subhead">Send us a message and we&rsquo;ll respond shortly.</p>
+  </div>
+
+  <!-- Message list (with watermark logo) -->
+  <div class="g-msgs-wrap">
+    <div class="g-msgs-watermark">
+      <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png" alt="">
+    </div>
+    <div class="g-msgs" id="g-msgs"></div>
+  </div>
+
+  <!-- Message input -->
+  <div class="g-input-area">
+    <div class="g-input-row">
+      <textarea class="g-textarea" id="g-input" placeholder="Describe what you need&hellip;" rows="1" onkeydown="guestKD(event)"></textarea>
+      <button class="send-btn" onclick="guestSend()">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="status-bar"><div class="sdot"></div><span>AV &amp; events team is available</span></div>
+  </div>
+
+  <!-- Tech setup bar — tech taps to go fullscreen, then it hides -->
+  <div class="tech-bar" id="tech-bar">
+    <div class="tech-bar-left">
+      <div class="tech-bar-label">Tech setup</div>
+      <div class="tech-bar-sub" id="tech-bar-room"></div>
+    </div>
+    <button class="tech-fs-btn" onclick="techGoFullscreen()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>
+      Tap to go full screen &amp; lock for guest
+    </button>
+  </div>
+
+</div><!-- end #view-guest -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     KIOSK SETTINGS OVERLAY
+     PIN-protected panel for tech use — opened by logo long-press
+════════════════════════════════════════════════════════════════ -->
+<div class="kiosk-settings-overlay" id="kiosk-overlay">
+  <div class="kiosk-panel">
+
+    <!-- State 1: PIN entry -->
+    <div id="kiosk-pin-state">
+      <div class="logo-wrap" style="margin-bottom:.5rem">
+        <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png"
+             alt="Hotel Illinois Conference Center" style="height:28px;width:auto;display:block">
+      </div>
+      <div class="kiosk-panel-sub">Staff access required</div>
+      <div class="kiosk-pin-row">
+        <div class="kiosk-pin-dot" id="pd0"></div>
+        <div class="kiosk-pin-dot" id="pd1"></div>
+        <div class="kiosk-pin-dot" id="pd2"></div>
+        <div class="kiosk-pin-dot" id="pd3"></div>
+      </div>
+      <div class="kiosk-error" id="kiosk-pin-err"></div>
+      <div class="kiosk-numpad">
+        <button class="kiosk-key" onclick="kioskKey('1')">1</button>
+        <button class="kiosk-key" onclick="kioskKey('2')">2</button>
+        <button class="kiosk-key" onclick="kioskKey('3')">3</button>
+        <button class="kiosk-key" onclick="kioskKey('4')">4</button>
+        <button class="kiosk-key" onclick="kioskKey('5')">5</button>
+        <button class="kiosk-key" onclick="kioskKey('6')">6</button>
+        <button class="kiosk-key" onclick="kioskKey('7')">7</button>
+        <button class="kiosk-key" onclick="kioskKey('8')">8</button>
+        <button class="kiosk-key" onclick="kioskKey('9')">9</button>
+        <button class="kiosk-key del" onclick="kioskBackspace()">&#9003;</button>
+        <button class="kiosk-key" onclick="kioskKey('0')">0</button>
+        <button class="kiosk-key del" onclick="closeKioskSettings()">&#10005;</button>
+      </div>
+    </div>
+
+    <!-- State 2: Settings actions (shown after correct PIN) -->
+    <div id="kiosk-actions-state" style="display:none">
+      <div class="logo-wrap" style="margin-bottom:.6rem">
+        <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20Grey.png"
+             alt="Hotel Illinois Conference Center" style="height:28px;width:auto;display:block">
+      </div>
+      <div class="kiosk-panel-sub">Kiosk settings</div>
+      <div class="kiosk-settings-actions">
+
+        <button class="kiosk-action-btn" onclick="kioskReload()">
+          <div class="kiosk-action-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ih-blue)" stroke-width="2.2">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight:600">Reload page</div>
+            <div style="font-size:.72rem;color:var(--ih-text-muted);margin-top:.1rem">Refresh and stay on this room</div>
+          </div>
+        </button>
+
+        <button class="kiosk-action-btn" onclick="kioskGoSetup()">
+          <div class="kiosk-action-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ih-blue)" stroke-width="2.2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight:600">Change room / event</div>
+            <div style="font-size:.72rem;color:var(--ih-text-muted);margin-top:.1rem">Return to setup screen</div>
+          </div>
+        </button>
+
+        <button class="kiosk-action-btn danger" onclick="kioskClearRoom()">
+          <div class="kiosk-action-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight:600">Clear all messages</div>
+            <div style="font-size:.72rem;color:#DC2626;margin-top:.1rem">Remove chat history for this room</div>
+          </div>
+        </button>
+
+      </div>
+      <button class="kiosk-cancel-btn" onclick="closeKioskSettings()">Close</button>
+    </div>
+
+  </div>
+</div><!-- end kiosk overlay -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     STAFF VIEW
+     Staff dashboard: sidebar + main area (dashboard / chat / archive)
+════════════════════════════════════════════════════════════════ -->
+<div id="view-staff">
+
+  <!-- Sidebar: room list + nav buttons -->
+  <div class="staff-sidebar">
+    <div class="sb-header">
+      <div class="logo-wrap">
+        <img src="https://raw.githubusercontent.com/avtechsatthei-blip/iHotel-messaging/80922d6d8b278759b9a9bbe2b799bec443976fd7/Ihotel%20Logo%20White.png"
+             alt="Hotel Illinois Conference Center" style="height:32px;width:auto;display:block">
+      </div>
+    </div>
+    <div class="sb-section">Event Rooms</div>
+    <div class="sb-rooms" id="sb-rooms"></div>
+    <div class="sb-footer">
+      <button class="sb-btn" onclick="showDash()">&#8859; Overview</button>
+      <button class="sb-btn" onclick="openAddModal()">+ Room</button>
+      <button class="sb-btn" onclick="markAllRead()">&check; All read</button>
+      <button class="sb-btn" onclick="showArchive()">&#128196; Archive</button>
+    </div>
+  </div>
+
+  <!-- Main content area -->
+  <div class="staff-main">
+
+    <!-- Top bar: title + room action buttons + status pills -->
+    <div class="topbar">
+      <div class="topbar-l">
+        <h2 id="tb-title">All Rooms</h2>
+        <p id="tb-sub">iHotel &amp; Illinois Conference Center</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <!-- Room action buttons — visible only when a room is open -->
+        <div class="topbar-actions" id="room-actions" style="display:none">
+          <button class="tb-action-btn" onclick="openEditModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Edit room
+          </button>
+          <button class="tb-action-btn" onclick="openRoomArchive()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            View history
+          </button>
+          <button class="tb-action-btn danger" onclick="confirmDeleteChat()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+            </svg>
+            Clear chat
+          </button>
+          <button class="tb-action-btn danger" onclick="confirmDeleteRoom()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+            </svg>
+            Delete room
+          </button>
+        </div>
+        <div class="pills">
+          <div class="pill pill-blue"><div class="pill-dot"></div><span id="p-rooms">0 rooms</span></div>
+          <div class="pill pill-orange" id="p-unread-wrap" style="display:none">
+            <div class="pill-dot"></div><span id="p-unread">0 unread</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New message alert strip -->
+    <div class="alert-strip" id="alert-strip"></div>
+
+    <!-- Archive page -->
+    <div class="archive-page" id="archive-view" style="display:none">
+      <div class="archive-toolbar">
+        <input class="archive-search" type="search" id="archive-search"
+               placeholder="Search messages, rooms, events…" oninput="filterArchive()">
+        <input class="archive-date-input" type="date" id="archive-date"
+               title="Filter by date" onchange="filterArchive()">
+        <button class="archive-filter-btn" id="af-guest" onclick="toggleArchiveFilter('guest')">Guest only</button>
+        <button class="archive-filter-btn" id="af-staff" onclick="toggleArchiveFilter('staff')">Staff only</button>
+        <button class="archive-filter-btn" onclick="clearArchiveFilters()">Clear</button>
+        <button class="archive-export-btn" onclick="exportArchive()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export CSV
+        </button>
+        <button class="notif-btn" id="notif-btn" onclick="requestNotifPermission()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          Enable notifications
+        </button>
+      </div>
+      <div class="archive-scroll" id="archive-list"></div>
+      <div class="archive-stats" id="archive-stats"></div>
+    </div>
+
+    <!-- Dashboard room grid -->
+    <div class="dash-wrap" id="dash-view">
+      <div class="dash-grid" id="dash-grid"></div>
+    </div>
+
+    <!-- Room chat view -->
+    <div class="chat-wrap" id="chat-view" style="display:none">
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <div class="staff-inp-area">
+        <!-- Quick-reply buttons -->
+        <div class="qr-row">
+          <button class="qr-btn" onclick="staffQR('On our way \u2014 give us just a moment.')">On our way</button>
+          <button class="qr-btn" onclick="staffQR('Got it, we\u2019ll take care of that right away.')">On it</button>
+          <button class="qr-btn" onclick="staffQR('We\u2019re sending a technician to your room now.')">Sending tech</button>
+          <button class="qr-btn" onclick="staffQR('Thank you \u2014 we\u2019re looking into it now.')">Looking into it</button>
+          <button class="qr-btn" onclick="staffQR('That should be resolved now. Let us know if you need anything else!')">Resolved &#10003;</button>
+        </div>
+        <div class="staff-inp-row">
+          <textarea class="staff-textarea" id="staff-input" placeholder="Reply to guest&hellip;"
+                    rows="1" onkeydown="staffKD(event)"></textarea>
+          <button class="staff-send-btn" onclick="staffSend()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder when no room is selected -->
+    <div class="no-sel" id="no-sel" style="display:none">
+      <h3>Select a room</h3>
+      <p>Choose a room from the sidebar to view its conversation.</p>
+    </div>
+
+  </div><!-- end .staff-main -->
+</div><!-- end #view-staff -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════════════════════ -->
+
+<!-- Add room -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAddModal()">&times;</button>
+    <h3>Add a Room</h3>
+    <input class="setup-input" type="text" id="new-room"   placeholder="Room name (e.g. Alma Mater Room)">
+    <input class="setup-input" type="text" id="new-event"  placeholder="Event name (optional)">
+    <button class="btn-blue" style="width:100%;margin-top:.2rem" onclick="addRoom()">Add Room</button>
+  </div>
+</div>
+
+<!-- Edit room -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeEditModal()">&times;</button>
+    <h3>Edit Room</h3>
+    <div class="modal-section-lbl">Room name</div>
+    <input class="setup-input" type="text" id="edit-room-name"  placeholder="Room name">
+    <div class="modal-section-lbl">Event name</div>
+    <input class="setup-input" type="text" id="edit-event-name" placeholder="Event name (optional)">
+    <button class="btn-blue" style="width:100%;margin-top:.5rem" onclick="saveEditRoom()">Save Changes</button>
+    <button class="btn-ghost" onclick="closeEditModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Single-room message history -->
+<div class="modal-bg" id="room-archive-modal">
+  <div class="modal-box" style="width:560px;max-height:80vh;display:flex;flex-direction:column">
+    <button class="modal-close" onclick="closeRoomArchive()">&times;</button>
+    <h3 id="room-archive-title">Message Archive</h3>
+    <div style="overflow-y:auto;flex:1;margin-top:.5rem" id="room-archive-list"></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT — ES modules, one import per concern
+════════════════════════════════════════════════════════════════ -->
+<script type="module">
+  // Boot order matters: ui and notifications have no dependencies,
+  // config/state/firebase are imported by everything else.
+  import './js/ui.js';
+  import './js/notifications.js';
+  import './js/rooms.js';
+  import './js/archive.js';
+  import './js/kiosk.js';
+  import { route } from './js/router.js';
+  import { attachFSReentry } from './js/ui.js';
+
+  // Listen for hash-based navigation
+  window.addEventListener('hashchange', route);
+  // Attach fullscreen re-entry (guest screen only)
+  attachFSReentry();
+  // Initial route
+  route();
+
+  // Register service worker for PWA / offline support
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(r  => console.log('[SW] Registered:', r.scope))
+        .catch(e => console.log('[SW] Registration failed:', e));
+    });
+  }
+</script>
+
+</body>
+</html>

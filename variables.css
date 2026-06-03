@@ -1,0 +1,61 @@
+/* ─── RESET & ROOT VARIABLES ─────────────────────────────────────────────── */
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Brand palette */
+  --ih-blue:        #10294B; /* Illini Blue */
+  --ih-blue-mid:    #1A3A6B;
+  --ih-blue-light:  #2A5090;
+  --ih-blue-dark:   #0A1B32;
+  --ih-orange:      #F15A32; /* Illini Orange */
+  --ih-orange-light:#F47A5A;
+  --ih-orange-dark: #C43E1A;
+  --ih-cream:       #EAEAEA; /* Cool Gray */
+  --ih-cream-dark:  #D0D0D0;
+  --ih-gray:        #606061; /* Charcoal */
+  --ih-gray-light:  #E5E9F1; /* Light Blue */
+  --ih-text:        #000000; /* Rich Black */
+  --ih-text-mid:    #606061; /* Charcoal */
+  --ih-text-muted:  #8A8A8A;
+  --white:          #FFFFFF;
+  --silver:         #A8A9AD; /* Silver Foil */
+  --success:        #1A6B45;
+  --radius:         8px;
+  --radius-lg:      14px;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #F4F5F7;
+  color: var(--ih-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* View visibility — each view activates via JS adding .active */
+#view-guest, #view-staff, #view-setup { display: none; }
+
+#view-guest.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+#view-staff.active {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+#view-setup.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--ih-blue);
+}
+
+/* Logo wrapper */
+.logo-wrap { display: flex; align-items: center; line-height: 0; }
